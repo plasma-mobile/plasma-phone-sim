@@ -44,8 +44,9 @@ int main(int argc, char *argv[])
     QCommandLineOption shellPackageOpt(QStringList() << QStringLiteral("s") << QStringLiteral("shell-package"),
                                        i18n("A Plasma Shell package to load"));
 
-    QCommandLineOption resOpt(QStringList() << QStringLiteral("r") << QStringLiteral("--dev-res"),
+    QCommandLineOption resOpt(QStringList() << QStringLiteral("r") << QStringLiteral("dev-res"),
                               i18n("Resolution to emultate: WIDTHxHEIGHT@DPI"),
+                              QStringLiteral("resolution"),
                               QStringLiteral("1080x1920@445"));
     QCommandLineOption shellPluginOpt(QStringList() << QStringLiteral("p") << QStringLiteral("shell-plugin"),
                                       i18n("Force loading the given shell plugin"),
