@@ -87,7 +87,11 @@ int main(int argc, char *argv[])
     }
     qDebug() << "Emulated resolution" << width << 'x' << height << '@' << deviceDpi;
 
+    // make our window
     QQuickWindow window;
+
+    // resize the window to the emulated resolution
+    // this gives the (approximate) physical size of the device on the local screen
     const QSize size(width, height);
     window.resize(size);
     window.setMinimumSize(size);
