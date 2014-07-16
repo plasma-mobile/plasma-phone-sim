@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     int width = 0;;
     int height = 0;
     int nativeDpi = app.primaryScreen()->logicalDotsPerInchX();
-    int dpi = nativeDpi;
+    int deviceDpi = nativeDpi;
     const QString res = parser.value(resOpt);
     const int xIndex = res.indexOf('x');
     if (xIndex != -1) {
@@ -72,14 +72,20 @@ int main(int argc, char *argv[])
         const int atIndex = res.indexOf('@');
         height = res.mid(xIndex + 1, atIndex - xIndex - 1).toInt();
         if (atIndex > 0) {
-            dpi = res.right(res.length() - atIndex - 1).toInt();
+            deviceDpi = res.right(res.length() - atIndex - 1).toInt();
         }
     }
 
     width = qMax(width, 300);
     height = qMax(height, 500);
-    qDebug() << "Going to emulate w/h/dpi" << width << height << dpi;
-    qDebug() << "At native dpi:" << nativeDpi;
+    qDebug() << "Going to emulate resolution" << width << 'x' << height << '@' << deviceDpi
+             << "at native dpi of" << nativeDpi;
+    if (nativeDpi != deviceDpi) {
+        float ratio = nativeDpi / float(deviceDpi);
+        width *= ratio;
+        height *= ratio;
+    }
+    qDebug() << "Emulated resolution" << width << 'x' << height << '@' << deviceDpi;
 
     return app.exec();
 }
