@@ -87,5 +87,12 @@ int main(int argc, char *argv[])
     }
     qDebug() << "Emulated resolution" << width << 'x' << height << '@' << deviceDpi;
 
+    QQuickWindow window;
+    const QSize size(width, height);
+    window.resize(size);
+    window.setMinimumSize(size);
+    window.setMaximumSize(size);
+    window.show();
+
     return app.exec();
 }
