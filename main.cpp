@@ -38,24 +38,24 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon::fromTheme("plasma")); //TODO: phone icon? :)
     parser.setApplicationDescription("Plasma Phone Device Simulator");
 
-    QCommandLineOption qmlPackage(QStringList() << QStringLiteral("q") << QStringLiteral("qml-package"),
-                                  i18n("Path to a QML package to load"));
+    QCommandLineOption qmlPackageOpt(QStringList() << QStringLiteral("q") << QStringLiteral("qml-package"),
+                                     i18n("Path to a QML package to load"));
 
-    QCommandLineOption shellPackage(QStringList() << QStringLiteral("s") << QStringLiteral("shell-package"),
-                                    i18n("A Plasma Shell package to load"));
+    QCommandLineOption shellPackageOpt(QStringList() << QStringLiteral("s") << QStringLiteral("shell-package"),
+                                       i18n("A Plasma Shell package to load"));
 
-    QCommandLineOption res(QStringList() << QStringLiteral("r") << QStringLiteral("--dev-res"),
-                                     i18n("Resolution to emultate: WIDTHxHEIGHT@DPI"),
-                                     QStringLiteral("1080x1920@445"));
-    QCommandLineOption shellPlugin(QStringList() << QStringLiteral("p") << QStringLiteral("shell-plugin"),
-                                     i18n("Force loading the given shell plugin"),
-                                     QStringLiteral("plugin"));
+    QCommandLineOption resOpt(QStringList() << QStringLiteral("r") << QStringLiteral("--dev-res"),
+                              i18n("Resolution to emultate: WIDTHxHEIGHT@DPI"),
+                              QStringLiteral("1080x1920@445"));
+    QCommandLineOption shellPluginOpt(QStringList() << QStringLiteral("p") << QStringLiteral("shell-plugin"),
+                                      i18n("Force loading the given shell plugin"),
+                                      QStringLiteral("plugin"));
 
     parser.addVersionOption();
     parser.addHelpOption();
-    parser.addOption(qmlPackage);
-    parser.addOption(shellPackage);
-    parser.addOption(res);
+    parser.addOption(qmlPackageOpt);
+    parser.addOption(shellPackageOpt);
+    parser.addOption(resOpt);
     parser.process(app);
 
     return app.exec();
