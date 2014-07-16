@@ -16,10 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QApplication>
 #include <QCommandLineParser>
-#include <QQuickWindow>
 #include <QDebug>
+#include <QGuiApplication>
+#include <QPaintDevice>
+#include <QScreen>
+#include <QQuickWindow>
 
 #include <klocalizedstring.h>
 
@@ -30,7 +32,7 @@ int main(int argc, char *argv[])
     KLocalizedString::setApplicationDomain("plasma-phone-sim");
 
     QCommandLineParser parser;
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     app.setApplicationName("plasma-phone-sim");
     app.setApplicationDisplayName(i18n("Plasma Phone Device Simulator"));
     app.setOrganizationDomain("kde.org");
@@ -58,6 +60,26 @@ int main(int argc, char *argv[])
     parser.addOption(shellPackageOpt);
     parser.addOption(resOpt);
     parser.process(app);
+
+    int width = 0;;
+    int height = 0;
+    int nativeDpi = app.primaryScreen()->logicalDotsPerInchX();
+    int dpi = nativeDpi;
+    const QString res = parser.value(resOpt);
+    const int xIndex = res.indexOf('x');
+    if (xIndex != -1) {
+        width = res.left(xIndex).toInt();
+        const int atIndex = res.indexOf('@');
+        height = res.mid(xIndex + 1, atIndex - xIndex - 1).toInt();
+        if (atIndex > 0) {
+            dpi = res.right(res.length() - atIndex - 1).toInt();
+        }
+    }
+
+    width = qMax(width, 300);
+    height = qMax(height, 500);
+    qDebug() << "Going to emulate w/h/dpi" << width << height << dpi;
+    qDebug() << "At native dpi:" << nativeDpi;
 
     return app.exec();
 }
