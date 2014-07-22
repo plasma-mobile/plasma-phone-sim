@@ -58,9 +58,11 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
     }
 
     if (main.isEmpty()) {
+        qDebug() << "No QML specified for loading";
         return;
     }
 
+    qDebug() << "Loading QML from:" << packagePath;
     KDeclarative::QmlObject *qmlObj = new KDeclarative::QmlObject(this);
     qmlObj->setInitializationDelayed(true);
     qmlObj->setSource(QUrl::fromLocalFile(main));
