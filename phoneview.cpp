@@ -23,6 +23,8 @@
 PhoneView::PhoneView(const QSize &size)
     : QQuickView()
 {
+    setResizeMode(SizeRootObjectToView);
+
     // resize to the emulated resolution
     // this gives the (approximate) physical size of the device on the local screen
     resize(size);
