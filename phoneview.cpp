@@ -18,7 +18,14 @@
 
 #include "phoneview.h"
 
+#include <QFileInfo>
+#include <QQuickItem>
+
 #include <KDeclarative/KDeclarative>
+#include <KDeclarative/QmlObject>
+
+#include <Plasma/Package>
+#include <Plasma/PluginLoader>
 
 PhoneView::PhoneView(const QSize &size)
     : QQuickView()
@@ -39,9 +46,26 @@ PhoneView::PhoneView(const QSize &size)
 
 void PhoneView::loadQmlPackage(const QString &packagePath)
 {
-    if (packagePath.isEmpty()) {
+    QString main;
+    QFileInfo info(packagePath);
+
+    if (info.isFile()) {
+        main = packagePath;
+    } else if (info.isDir()) {
+        Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        package.setPath(packagePath);
+        main = package.filePath("main");
+    }
+
+    if (main.isEmpty()) {
         return;
     }
+
+    KDeclarative::QmlObject *qmlObj = new KDeclarative::QmlObject(this);
+    qmlObj->setInitializationDelayed(true);
+    qmlObj->setSource(QUrl::fromLocalFile(main));
+    qmlObj->completeInitialization();
+    qobject_cast<QQuickItem *>(qmlObj->rootObject())->setParentItem(rootObject());
 }
 
 void PhoneView::loadShellPackage(const QString &packagePath)
