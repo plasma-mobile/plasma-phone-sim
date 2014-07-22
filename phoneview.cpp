@@ -74,10 +74,14 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
 
 void PhoneView::loadShellPackage(const QString &packagePath)
 {
-    if (packagePath.isEmpty()) {
+    Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
+    package.setPath(packagePath);
+    if (!package.isValid()) {
+        qDebug() << "Invalid shell package!";
         return;
     }
 
+    qDebug() << "Loading shell package at:" << packagePath;
 }
 
 #include "moc_phoneview.cpp"
