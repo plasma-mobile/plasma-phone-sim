@@ -43,18 +43,17 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("Plasma Phone Device Simulator");
 
     QCommandLineOption qmlPackageOpt(QStringList() << QStringLiteral("q") << QStringLiteral("qml-package"),
-                                     i18n("Path to a QML package to load"));
+                                     i18n("Path to a QML package to load"),
+                                     i18n("QML package path"));
 
     QCommandLineOption shellPackageOpt(QStringList() << QStringLiteral("s") << QStringLiteral("shell-package"),
-                                       i18n("A Plasma Shell package to load"));
+                                       i18n("A Plasma Shell package to load"),
+                                       i18n("shell package path"));
 
     QCommandLineOption resOpt(QStringList() << QStringLiteral("r") << QStringLiteral("dev-res"),
                               i18n("Resolution to emultate: WIDTHxHEIGHT@DPI"),
                               QStringLiteral("resolution"),
                               QStringLiteral("1080x1920@445"));
-    QCommandLineOption shellPluginOpt(QStringList() << QStringLiteral("p") << QStringLiteral("shell-plugin"),
-                                      i18n("Force loading the given shell plugin"),
-                                      QStringLiteral("plugin"));
 
     parser.addVersionOption();
     parser.addHelpOption();
@@ -93,15 +92,11 @@ int main(int argc, char *argv[])
     PhoneView window(size);
     window.show();
 
-    const QString shellPackage = parser.value(shellPluginOpt);
+    const QString shellPackage = parser.value(shellPackageOpt);
     if (shellPackage.isEmpty()) {
         // no shell package, lets see if we have a QML package then
         const QString qmlPackage = parser.value(qmlPackageOpt);
-        if (!qmlPackage.isEmpty()) {
-            window.loadQmlPackage(qmlPackage);
-        } else {
-            qDebug() << "No QML specific to be loaded";
-        }
+        window.loadQmlPackage(qmlPackage);
     } else {
         window.loadShellPackage(shellPackage);
     }
