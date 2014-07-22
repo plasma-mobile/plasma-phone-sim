@@ -93,5 +93,19 @@ int main(int argc, char *argv[])
     PhoneView window(size);
     window.show();
 
+    const QString shellPackage = parser.value(shellPluginOpt);
+    if (shellPackage.isEmpty()) {
+        // no shell package, lets see if we have a QML package then
+        const QString qmlPackage = parser.value(qmlPackageOpt);
+        if (!qmlPackage.isEmpty()) {
+            window.loadQmlPackage(qmlPackage);
+        } else {
+            qDebug() << "No QML specific to be loaded";
+        }
+    } else {
+        window.loadShellPackage(shellPackage);
+    }
+
+
     return app.exec();
 }
