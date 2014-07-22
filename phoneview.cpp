@@ -65,7 +65,9 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
     qmlObj->setInitializationDelayed(true);
     qmlObj->setSource(QUrl::fromLocalFile(main));
     qmlObj->completeInitialization();
-    qobject_cast<QQuickItem *>(qmlObj->rootObject())->setParentItem(rootObject());
+
+    QQuickItem * qqItem = qobject_cast<QQuickItem *>(qmlObj->rootObject());
+    qqItem->setParentItem(rootObject());
 }
 
 void PhoneView::loadShellPackage(const QString &packagePath)
