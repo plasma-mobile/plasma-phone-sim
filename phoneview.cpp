@@ -37,4 +37,19 @@ PhoneView::PhoneView(const QSize &size)
     //kdeclarative.setTranslationDomain();
 }
 
+void PhoneView::loadQmlPackage(const QString &packagePath)
+{
+    if (packagePath.isEmpty()) {
+        return;
+    }
+}
+
+void PhoneView::loadShellPackage(const QString &packagePath)
+{
+    if (packagePath.isEmpty()) {
+        return;
+    }
+
+}
+
 #include "moc_phoneview.cpp"

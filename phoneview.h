@@ -26,4 +26,6 @@ class PhoneView : public QQuickView
 public:
     PhoneView(const QSize &size);
 
+    void loadQmlPackage(const QString &packagePath);
+    void loadShellPackage(const QString &packagePath);
 };
