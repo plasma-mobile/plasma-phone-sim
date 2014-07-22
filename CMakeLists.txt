@@ -25,7 +25,7 @@ include(FeatureSummary)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Gui Widgets Qml Quick)
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Plasma Service)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Plasma Service Declarative)
 find_package(KF5 REQUIRED COMPONENTS PlasmaQuick)
 
 
@@ -35,6 +35,7 @@ include(CheckIncludeFiles)
 
 set(plasma-phone-sim_SRCS
     main.cpp
+    phoneview.cpp
 )
 
 #qt5_wrap_ui(plasma-phone-sim_SRCS .ui)
@@ -46,6 +47,7 @@ target_link_libraries(plasma-phone-sim
   Qt5::Widgets
   Qt5::Quick
   KF5::I18n
+  KF5::Declarative
   KF5::PlasmaQuick
 )
 
