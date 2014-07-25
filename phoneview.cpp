@@ -18,6 +18,7 @@
 
 #include "phoneview.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QQuickItem>
 
@@ -58,8 +59,10 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
     }
 
     if (main.isEmpty()) {
-        qDebug() << "No QML specified for loading";
-        return;
+        Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        // TODO: locate dir in system install locations
+        package.setPath(QDir::currentPath() + "/plasma-phone-sim-default");
+        main = package.filePath("mainscript");
     }
 
     qDebug() << "Loading QML from:" << packagePath;
