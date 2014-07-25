@@ -18,7 +18,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QPaintDevice>
 #include <QScreen>
 #include <QQuickWindow>
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     KLocalizedString::setApplicationDomain("plasma-phone-sim");
 
     QCommandLineParser parser;
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setApplicationName("plasma-phone-sim");
     app.setApplicationDisplayName(i18n("Plasma Phone Device Simulator"));
     app.setOrganizationDomain("kde.org");
