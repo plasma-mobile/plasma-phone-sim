@@ -47,7 +47,7 @@ PhoneView::PhoneView(const QSize &size)
 void PhoneView::loadQmlPackage(const QString &packagePath)
 {
     QString main;
-    QFileInfo info(packagePath);
+    const QFileInfo info(packagePath);
 
     if (info.isFile()) {
         main = packagePath;
