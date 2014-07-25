@@ -54,7 +54,7 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
     } else if (info.isDir()) {
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         package.setPath(packagePath);
-        main = package.filePath("main");
+        main = package.filePath("mainscript");
     }
 
     if (main.isEmpty()) {
