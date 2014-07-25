@@ -63,13 +63,16 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
     }
 
     qDebug() << "Loading QML from:" << packagePath;
+    setSource(main);
+    /*
     KDeclarative::QmlObject *qmlObj = new KDeclarative::QmlObject(this);
     qmlObj->setInitializationDelayed(true);
     qmlObj->setSource(QUrl::fromLocalFile(main));
     qmlObj->completeInitialization();
-
-    QQuickItem * qqItem = qobject_cast<QQuickItem *>(qmlObj->rootObject());
+    qqItem->setWidth(root->width());
+    qqItem->setHeight(root->height());
     qqItem->setParentItem(rootObject());
+    */
 }
 
 void PhoneView::loadShellPackage(const QString &packagePath)
