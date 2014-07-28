@@ -18,11 +18,17 @@
 
 #pragma once
 
-#include <QQuickView>
+#include <QQuickWindow>
+
+namespace KDeclarative
+{
+    class QmlObject;
+} // namespace KDeclarative
 
 class SimApi;
 
-class PhoneView : public QQuickView
+
+class PhoneView : public QQuickWindow
 {
     Q_OBJECT
 
@@ -35,4 +41,5 @@ public Q_SLOTS:
 
 private:
     SimApi *m_simApi;
+    KDeclarative::QmlObject *m_qmlObj;
 };

@@ -32,21 +32,20 @@
 #include "simapi.h"
 
 PhoneView::PhoneView(const QSize &size)
-    : QQuickView(),
-      m_simApi(0)
+    : QQuickWindow(),
+      m_simApi(0),
+      m_qmlObj(0)
 {
-    setResizeMode(SizeRootObjectToView);
+    //setResizeMode(SizeRootObjectToView);
 
     // resize to the emulated resolution
     // this gives the (approximate) physical size of the device on the local screen
     resize(size);
     setMinimumSize(size);
     setMaximumSize(size);
-
-    KDeclarative::KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(engine());
-    kdeclarative.setupBindings();
-    //kdeclarative.setTranslationDomain();
+    contentItem()->setWidth(width());
+    contentItem()->setHeight(height());
+    setClearBeforeRendering(true);
 }
 
 void PhoneView::loadQmlPackage(const QString &packagePath)
@@ -71,27 +70,36 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
         main = package.filePath("mainscript");
     }
 
+    m_qmlObj->deleteLater();
+    m_qmlObj = new KDeclarative::QmlObject(this);
+    m_qmlObj->setInitializationDelayed(true);
+
+    KDeclarative::KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(m_qmlObj->engine());
+    kdeclarative.setupBindings();
+    //kdeclarative.setTranslationDomain();
+
     if (!m_simApi) {
         m_simApi = new SimApi(path, this);
         connect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
-        engine()->rootContext()->setContextProperty("api", m_simApi);
     } else if (sender() != m_simApi || packagePath != path) {
         disconnect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
         m_simApi->setPackagePath(packagePath);
         connect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
     }
 
+    m_qmlObj->engine()->rootContext()->setContextProperty("api", m_simApi);
+
     qDebug() << "Loading QML from:" << packagePath;
-    setSource(main);
-    /*
-    KDeclarative::QmlObject *qmlObj = new KDeclarative::QmlObject(this);
-    qmlObj->setInitializationDelayed(true);
-    qmlObj->setSource(QUrl::fromLocalFile(main));
-    qmlObj->completeInitialization();
-    qqItem->setWidth(root->width());
-    qqItem->setHeight(root->height());
-    qqItem->setParentItem(rootObject());
-    */
+    m_qmlObj->setSource(QUrl::fromLocalFile(main));
+
+    QVariantHash initialProperties;
+    initialProperties["width"] = width();
+    initialProperties["height"] = height();
+    m_qmlObj->completeInitialization(initialProperties);
+
+    QQuickItem *mainItem = static_cast<QQuickItem *>(m_qmlObj->rootObject());
+    mainItem->setParentItem(contentItem());
 }
 
 void PhoneView::loadShellPackage(const QString &packagePath)
