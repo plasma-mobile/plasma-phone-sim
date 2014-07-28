@@ -23,6 +23,10 @@
 #include <QScreen>
 #include <QQuickWindow>
 
+#include <Plasma/PluginLoader>
+#include <Plasma/Package>
+#include <Plasma/Svg>
+
 #include <klocalizedstring.h>
 
 #include "deviceview.h"
@@ -58,7 +62,9 @@ int main(int argc, char *argv[])
     QCommandLineOption deviceOpt(QStringList() << QStringLiteral("d") << QStringLiteral("device"),
                                  i18n("Name of device to emulate"),
                                  QStringLiteral("device"),
-                                 QStringLiteral("nexu5"));
+                                 QStringLiteral("nexus5"));
+
+    QCommandLineOption listDevicesOpt(QStringLiteral("list-devices"), i18n("Name of supported devices"));
 
     parser.addVersionOption();
     parser.addHelpOption();
@@ -66,9 +72,25 @@ int main(int argc, char *argv[])
     parser.addOption(shellPackageOpt);
     parser.addOption(resOpt);
     parser.addOption(deviceOpt);
+    parser.addOption(listDevicesOpt);
     parser.process(app);
 
-    int width = 0;;
+    if (parser.isSet(listDevicesOpt)) {
+        Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        package.removeDefinition("mainscript");
+        package.setPath("org.kde.plasmadevicesim.screens");
+        const QStringList devices = package.entryList("images");
+        QMap<QString, QString> sortedDevices;
+        for (auto device: devices) {
+            sortedDevices.insert(device.left(device.lastIndexOf('.')), device);
+        }
+        qDebug() << "Supported devices include:" << QStringList(sortedDevices.keys()).join(QStringLiteral(", "));
+        exit(0);
+    }
+
+    QString svgPath;
+    QSize frameSize;
+    int width = 0;
     int height = 0;
     int nativeDpi = app.primaryScreen()->logicalDotsPerInchX();
     int deviceDpi = nativeDpi;
