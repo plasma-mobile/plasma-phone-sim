@@ -52,4 +52,5 @@ target_link_libraries(plasma-phone-sim
 )
 
 install(TARGETS plasma-phone-sim ${INSTALL_TARGETS_DEFAULT_ARGS})
+plasma_install_package(qml/default org.kde.plasmaphonesim.default packages package)
 

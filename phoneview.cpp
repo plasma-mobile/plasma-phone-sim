@@ -60,8 +60,7 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
 
     if (main.isEmpty()) {
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-        // TODO: locate dir in system install locations
-        package.setPath(QDir::currentPath() + "/plasma-phone-sim-default");
+        package.setPath("org.kde.plasmaphonesim.default");
         main = package.filePath("mainscript");
     }
 
