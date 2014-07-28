@@ -75,8 +75,10 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
         m_simApi = new SimApi(path, this);
         connect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
         engine()->rootContext()->setContextProperty("api", m_simApi);
-    } else if (sender() != m_simApi) {
+    } else if (sender() != m_simApi || packagePath != path) {
+        disconnect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
         m_simApi->setPackagePath(packagePath);
+        connect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
     }
 
     qDebug() << "Loading QML from:" << packagePath;
