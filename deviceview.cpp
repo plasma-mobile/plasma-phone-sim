@@ -89,7 +89,7 @@ void DeviceView::loadQmlPackage(const QString &packagePath)
 
     m_qmlObj->engine()->rootContext()->setContextProperty("api", m_simApi);
 
-    qDebug() << "Loading QML from:" << packagePath;
+    qDebug() << "Loading QML from:" << path;
     m_qmlObj->setSource(QUrl::fromLocalFile(main));
 
     QVariantHash initialProperties;
