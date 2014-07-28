@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <QQmlComponent>
 #include <QQuickWindow>
 
 namespace KDeclarative
@@ -33,13 +34,19 @@ class DeviceView : public QQuickWindow
     Q_OBJECT
 
 public:
-    DeviceView(const QSize &size);
+    DeviceView(const QSize &size, const QString &frameSvgPath);
 
 public Q_SLOTS:
     void loadQmlPackage(const QString &packagePath);
     void loadShellPackage(const QString &packagePath);
 
+private Q_SLOTS:
+    void createFrame(QQmlComponent::Status status);
+
 private:
     SimApi *m_simApi;
     KDeclarative::QmlObject *m_qmlObj;
+    QQuickItem *m_parentItem;
+    QQmlComponent *m_frameComponent;
+    QQmlEngine *m_frameEngine;
 };

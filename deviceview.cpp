@@ -28,13 +28,17 @@
 
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
+#include <Plasma/Svg>
 
 #include "simapi.h"
 
-DeviceView::DeviceView(const QSize &size)
+DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
     : QQuickWindow(),
       m_simApi(0),
-      m_qmlObj(0)
+      m_qmlObj(0),
+      m_parentItem(0),
+      m_frameComponent(0),
+      m_frameEngine(0)
 {
     // resize to the emulated resolution
     // this gives the (approximate) physical size of the device on the local screen
@@ -42,9 +46,52 @@ DeviceView::DeviceView(const QSize &size)
     setMinimumSize(size);
     setMaximumSize(size);
 
-//    setClearBeforeRendering(true);
-//    setColor(Qt::transparent);
-//    setFlags(Qt::FramelessWindowHint);
+    if (!frameSvgPath.isEmpty()) {
+        Plasma::Svg svg;
+        svg.setImagePath(frameSvgPath);
+        svg.resize(size);
+        const QRectF screenGeom = svg.elementRect("device-screen");
+        const int leftMargin = screenGeom.left();
+        const int topMargin = screenGeom.top();
+        const int rightMargin = size.width() - screenGeom.right();
+        const int bottomMargin = size.height() - screenGeom.bottom();
+
+        const QString frameQml = QString(
+            "import QtQuick 2.0\n\
+             import org.kde.plasma.core 2.0 as PlasmaCore\n\
+             \n\
+             PlasmaCore.SvgItem { \n\
+                svg: PlasmaCore.Svg { imagePath: \"%1\" } \n\
+                anchors.fill: parent\n\
+                anchors.leftMargin: %2\n\
+                anchors.topMargin: %3\n\
+                anchors.rightMargin: %4\n\
+                anchors.bottomMargin: %5 }")
+        .arg(frameSvgPath).arg(leftMargin).arg(topMargin).arg(rightMargin).arg(bottomMargin);
+        m_frameEngine = new QQmlEngine(this);
+        m_frameComponent = new QQmlComponent(m_frameEngine);
+        m_frameComponent->setData(frameQml.toUtf8(), QUrl());
+        if (m_frameComponent->isError()) {
+            qDebug() << "INTERNAL QML ERROR: " << m_frameComponent->errors();
+        } else if (m_frameComponent->isReady()) {
+            createFrame(QQmlComponent::Ready);
+        } else {
+            connect(m_frameComponent, &QQmlComponent::statusChanged,
+                    this, &DeviceView::createFrame);
+        }
+
+        setClearBeforeRendering(true);
+        setColor(Qt::transparent);
+        setFlags(Qt::FramelessWindowHint);
+    }
+}
+
+void DeviceView::createFrame(QQmlComponent::Status status)
+{
+    if (status == QQmlComponent::Ready) {
+        m_parentItem = static_cast<QQuickItem *>(m_frameComponent->create(m_frameEngine->rootContext()));
+        m_parentItem->setParentItem(contentItem());
+    }
 }
 
 void DeviceView::loadQmlPackage(const QString &packagePath)
@@ -98,7 +145,7 @@ void DeviceView::loadQmlPackage(const QString &packagePath)
     m_qmlObj->completeInitialization(initialProperties);
 
     QQuickItem *mainItem = static_cast<QQuickItem *>(m_qmlObj->rootObject());
-    mainItem->setParentItem(contentItem());
+    mainItem->setParentItem(m_parentItem ? m_parentItem : contentItem());
 }
 
 void DeviceView::loadShellPackage(const QString &packagePath)
