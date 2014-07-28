@@ -33,7 +33,7 @@ void SimApi::setPackagePath(const QString &path)
 {
     if (path != m_packagePath) {
         m_packagePath = path;
-        emit packagePathChanged();
+        emit packagePathChanged(m_packagePath);
     }
 }
 

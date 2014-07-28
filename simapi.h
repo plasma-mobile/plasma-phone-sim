@@ -31,7 +31,7 @@ public:
     void setPackagePath(const QString &path);
 
 Q_SIGNALS:
-    void packagePathChanged();
+    void packagePathChanged(const QString &path);
 
 private:
     QString m_packagePath;
