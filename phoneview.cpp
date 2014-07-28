@@ -20,6 +20,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QQmlContext>
 #include <QQuickItem>
 
 #include <KDeclarative/KDeclarative>
@@ -28,8 +29,11 @@
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
 
+#include "simapi.h"
+
 PhoneView::PhoneView(const QSize &size)
-    : QQuickView()
+    : QQuickView(),
+      m_simApi(0)
 {
     setResizeMode(SizeRootObjectToView);
 
@@ -48,20 +52,30 @@ PhoneView::PhoneView(const QSize &size)
 void PhoneView::loadQmlPackage(const QString &packagePath)
 {
     QString main;
+    QString path;
     const QFileInfo info(packagePath);
 
     if (info.isFile()) {
-        main = packagePath;
+        path = main = packagePath;
     } else if (info.isDir()) {
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         package.setPath(packagePath);
+        path = package.path();
         main = package.filePath("mainscript");
     }
 
     if (main.isEmpty()) {
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         package.setPath("org.kde.plasmaphonesim.default");
+        path = package.path();
         main = package.filePath("mainscript");
+    }
+
+    if (!m_simApi) {
+        m_simApi = new SimApi(path, this);
+        engine()->rootContext()->setContextProperty("api", m_simApi);
+    } else {
+        m_simApi->setPackagePath(packagePath);
     }
 
     qDebug() << "Loading QML from:" << packagePath;

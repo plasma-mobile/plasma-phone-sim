@@ -16,8 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QQuickView>
 #pragma once
+
+#include <QQuickView>
+
+class SimApi;
 
 class PhoneView : public QQuickView
 {
@@ -28,4 +31,7 @@ public:
 
     void loadQmlPackage(const QString &packagePath);
     void loadShellPackage(const QString &packagePath);
+
+private:
+    SimApi *m_simApi;
 };
