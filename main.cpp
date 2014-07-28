@@ -55,11 +55,17 @@ int main(int argc, char *argv[])
                               QStringLiteral("resolution"),
                               QStringLiteral("1080x1920@445"));
 
+    QCommandLineOption deviceOpt(QStringList() << QStringLiteral("d") << QStringLiteral("device"),
+                                 i18n("Name of device to emulate"),
+                                 QStringLiteral("device"),
+                                 QStringLiteral("nexu5"));
+
     parser.addVersionOption();
     parser.addHelpOption();
     parser.addOption(qmlPackageOpt);
     parser.addOption(shellPackageOpt);
     parser.addOption(resOpt);
+    parser.addOption(deviceOpt);
     parser.process(app);
 
     int width = 0;;
