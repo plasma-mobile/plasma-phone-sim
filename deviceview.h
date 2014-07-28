@@ -49,4 +49,5 @@ private:
     QQuickItem *m_parentItem;
     QQmlComponent *m_frameComponent;
     QQmlEngine *m_frameEngine;
+    QRectF m_screenGeom;
 };

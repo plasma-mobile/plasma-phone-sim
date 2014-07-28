@@ -50,24 +50,26 @@ DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
         Plasma::Svg svg;
         svg.setImagePath(frameSvgPath);
         svg.resize(size);
-        const QRectF screenGeom = svg.elementRect("device-screen");
-        const int leftMargin = screenGeom.left();
-        const int topMargin = screenGeom.top();
-        const int rightMargin = size.width() - screenGeom.right();
-        const int bottomMargin = size.height() - screenGeom.bottom();
+        m_screenGeom = svg.elementRect("device-screen");
+        //qDebug() << m_screenGeom << size;
 
         const QString frameQml = QString(
             "import QtQuick 2.0\n\
              import org.kde.plasma.core 2.0 as PlasmaCore\n\
              \n\
              PlasmaCore.SvgItem { \n\
+                id: screen\n\
                 svg: PlasmaCore.Svg { imagePath: \"%1\" } \n\
                 anchors.fill: parent\n\
-                anchors.leftMargin: %2\n\
-                anchors.topMargin: %3\n\
-                anchors.rightMargin: %4\n\
-                anchors.bottomMargin: %5 }")
-        .arg(frameSvgPath).arg(leftMargin).arg(topMargin).arg(rightMargin).arg(bottomMargin);
+                Rectangle {\n\
+                    x: %2\n\
+                    y: %3\n\
+                    width: %4\n\
+                    height: %5\n\
+                }\n\
+            }")
+        .arg(frameSvgPath).arg(m_screenGeom.left()).arg(m_screenGeom.top()).arg(m_screenGeom.width()).arg(m_screenGeom.height());
+        //qDebug() << frameQml;
         m_frameEngine = new QQmlEngine(this);
         m_frameComponent = new QQmlComponent(m_frameEngine);
         m_frameComponent->setData(frameQml.toUtf8(), QUrl());
@@ -91,11 +93,13 @@ void DeviceView::createFrame(QQmlComponent::Status status)
     if (status == QQmlComponent::Ready) {
         m_parentItem = static_cast<QQuickItem *>(m_frameComponent->create(m_frameEngine->rootContext()));
         m_parentItem->setParentItem(contentItem());
+        m_parentItem = m_parentItem->childItems().first();
     }
 }
 
 void DeviceView::loadQmlPackage(const QString &packagePath)
 {
+    //FIXME: is m_parentItem already created?
     QString main;
     QString path;
     const QFileInfo info(packagePath);
@@ -140,11 +144,14 @@ void DeviceView::loadQmlPackage(const QString &packagePath)
     m_qmlObj->setSource(QUrl::fromLocalFile(main));
 
     QVariantHash initialProperties;
-    initialProperties["width"] = width();
-    initialProperties["height"] = height();
+    //initialProperties["x"] = m_screenGeom.x();
+    //initialProperties["y"] = m_screenGeom.y();
+    initialProperties["width"] = m_screenGeom.width();
+    initialProperties["height"] = m_screenGeom.height();
     m_qmlObj->completeInitialization(initialProperties);
 
     QQuickItem *mainItem = static_cast<QQuickItem *>(m_qmlObj->rootObject());
+    //qDebug() << "Setting to" << m_parentItem;
     mainItem->setParentItem(m_parentItem ? m_parentItem : contentItem());
 }
 
