@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Keywords=
+Icon=
+Name=Device Screens
+Type=Service
+
+X-KDE-ServiceTypes=Plasma/Generic
+X-KDE-ParentApp=
+X-KDE-PluginInfo-Author=Aaron Seigo
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Email=aseigo@kde.org
+X-KDE-PluginInfo-License=GPLv2+
+X-KDE-PluginInfo-Name=org.kde.plasmadevicesim.screens
+X-KDE-PluginInfo-Version=
+X-KDE-PluginInfo-Website=
+
