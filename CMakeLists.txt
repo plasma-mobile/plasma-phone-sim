@@ -36,6 +36,7 @@ include(CheckIncludeFiles)
 set(plasma-phone-sim_SRCS
     main.cpp
     phoneview.cpp
+    simapi.cpp
 )
 
 #qt5_wrap_ui(plasma-phone-sim_SRCS .ui)
