@@ -10,7 +10,7 @@ ColumnLayout {
         selectExisting: true
         selectMultiple: false
         onAccepted: {
-            console.log("File is: " + fileDialog.fileUrls);
+            api.packagePath = fileDialog.fileUrl
         }
     }
 
