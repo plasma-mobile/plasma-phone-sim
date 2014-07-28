@@ -94,30 +94,59 @@ int main(int argc, char *argv[])
     int height = 0;
     int nativeDpi = app.primaryScreen()->logicalDotsPerInchX();
     int deviceDpi = nativeDpi;
-    const QString res = parser.value(resOpt);
-    const int xIndex = res.indexOf('x');
-    if (xIndex != -1) {
-        width = res.left(xIndex).toInt();
-        const int atIndex = res.indexOf('@');
-        height = res.mid(xIndex + 1, atIndex - xIndex - 1).toInt();
-        if (atIndex > 0) {
-            deviceDpi = res.right(res.length() - atIndex - 1).toInt();
+    if (parser.isSet(resOpt)) {
+        const QString res = parser.value(resOpt);
+        const int xIndex = res.indexOf('x');
+        if (xIndex != -1) {
+            width = qMax(300, res.left(xIndex).toInt());
+            const int atIndex = res.indexOf('@');
+            height = qMax(500, res.mid(xIndex + 1, atIndex - xIndex - 1).toInt());
+            if (atIndex > 0) {
+                deviceDpi = res.right(res.length() - atIndex - 1).toInt();
+            }
+        }
+    } else {
+        const QString device = parser.value(deviceOpt);
+
+        Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        package.removeDefinition("mainscript");
+        package.setPath("org.kde.plasmadevicesim.screens");
+        svgPath = package.filePath("images", device + ".svgz");
+        if (svgPath.isEmpty()) {
+            svgPath = package.filePath("images", device + ".svg");
+
+            if (svgPath.isEmpty()) {
+                const QString errorMsg = i18n("Could not find requested device %1. Try --list-devices.", device);
+                qFatal(errorMsg.toLocal8Bit());
+            }
+        }
+
+        Plasma::Svg svg;
+        svg.setImagePath(svgPath);
+        frameSize = svg.size();
+        width = svg.elementSize("device-screen").width();
+        height = svg.elementSize("device-screen").height();
+        if (svg.hasElement("screen-res")) {
+            deviceDpi = svg.elementSize("screen-res").width();
         }
     }
 
-    width = qMax(width, 300);
-    height = qMax(height, 500);
     qDebug() << "Going to emulate resolution" << width << 'x' << height << '@' << deviceDpi
              << "at native dpi of" << nativeDpi;
+    float ratio = 1;
     if (nativeDpi != deviceDpi) {
-        float ratio = nativeDpi / float(deviceDpi);
-        width *= ratio;
-        height *= ratio;
+        ratio = nativeDpi / float(deviceDpi);
     }
-    qDebug() << "Emulated resolution" << width << 'x' << height << '@' << deviceDpi;
 
-    const QSize size(width, height);
-    DeviceView window(size);
+    QSize size;
+    if (frameSize.isEmpty()) {
+        size = QSize(width * ratio, height * ratio);
+    } else {
+        size = QSize(frameSize.width() * ratio, frameSize.height() * ratio);
+    }
+
+    qDebug() << "Emulated resolution" << size << '@' << deviceDpi;
+    DeviceView window(size, svgPath);
     window.show();
 
     const QString shellPackage = parser.value(shellPackageOpt);
