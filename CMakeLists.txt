@@ -35,7 +35,7 @@ include(CheckIncludeFiles)
 
 set(plasma-device-sim_SRCS
     main.cpp
-    phoneview.cpp
+    deviceview.cpp
     simapi.cpp
 )
 

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "phoneview.h"
+#include "deviceview.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -113,4 +113,4 @@ void DeviceView::loadShellPackage(const QString &packagePath)
     qDebug() << "Loading shell package at:" << packagePath;
 }
 
-#include "moc_phoneview.cpp"
+#include "moc_deviceview.cpp"

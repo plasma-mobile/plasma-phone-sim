@@ -25,7 +25,7 @@
 
 #include <klocalizedstring.h>
 
-#include "phoneview.h"
+#include "deviceview.h"
 
 static const char version[] = "0.1";
 
