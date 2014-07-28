@@ -37,14 +37,14 @@ int main(int argc, char *argv[])
 {
     KLocalizedString::setApplicationDomain("plasma-phone-sim");
 
-    QCommandLineParser parser;
+    QCommandLineParser cliOptions;
     QApplication app(argc, argv);
     app.setApplicationName("plasma-phone-sim");
     app.setApplicationDisplayName(i18n("Plasma Device Simulator"));
     app.setOrganizationDomain("kde.org");
     app.setApplicationVersion(version);
     app.setWindowIcon(QIcon::fromTheme("plasma")); //TODO: phone icon? :)
-    parser.setApplicationDescription("Plasma Device Simulator");
+    cliOptions.setApplicationDescription("Plasma Device Simulator");
 
     QCommandLineOption qmlPackageOpt(QStringList() << QStringLiteral("q") << QStringLiteral("qml-package"),
                                      i18n("Path to a QML package to load"),
@@ -66,16 +66,16 @@ int main(int argc, char *argv[])
 
     QCommandLineOption listDevicesOpt(QStringLiteral("list-devices"), i18n("Name of supported devices"));
 
-    parser.addVersionOption();
-    parser.addHelpOption();
-    parser.addOption(qmlPackageOpt);
-    parser.addOption(shellPackageOpt);
-    parser.addOption(resOpt);
-    parser.addOption(deviceOpt);
-    parser.addOption(listDevicesOpt);
-    parser.process(app);
+    cliOptions.addVersionOption();
+    cliOptions.addHelpOption();
+    cliOptions.addOption(qmlPackageOpt);
+    cliOptions.addOption(shellPackageOpt);
+    cliOptions.addOption(resOpt);
+    cliOptions.addOption(deviceOpt);
+    cliOptions.addOption(listDevicesOpt);
+    cliOptions.process(app);
 
-    if (parser.isSet(listDevicesOpt)) {
+    if (cliOptions.isSet(listDevicesOpt)) {
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         package.removeDefinition("mainscript");
         package.setPath("org.kde.plasmadevicesim.screens");
@@ -94,8 +94,8 @@ int main(int argc, char *argv[])
     int height = 0;
     int nativeDpi = app.primaryScreen()->logicalDotsPerInchX();
     int deviceDpi = nativeDpi;
-    if (parser.isSet(resOpt)) {
-        const QString res = parser.value(resOpt);
+    if (cliOptions.isSet(resOpt)) {
+        const QString res = cliOptions.value(resOpt);
         const int xIndex = res.indexOf('x');
         if (xIndex != -1) {
             width = qMax(300, res.left(xIndex).toInt());
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
             }
         }
     } else {
-        const QString device = parser.value(deviceOpt);
+        const QString device = cliOptions.value(deviceOpt);
 
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         package.removeDefinition("mainscript");
@@ -149,10 +149,10 @@ int main(int argc, char *argv[])
     DeviceView window(size, svgPath);
     window.show();
 
-    const QString shellPackage = parser.value(shellPackageOpt);
+    const QString shellPackage = cliOptions.value(shellPackageOpt);
     if (shellPackage.isEmpty()) {
         // no shell package, lets see if we have a QML package then
-        const QString qmlPackage = parser.value(qmlPackageOpt);
+        const QString qmlPackage = cliOptions.value(qmlPackageOpt);
         window.loadQmlPackage(qmlPackage);
     } else {
         window.loadShellPackage(shellPackage);
