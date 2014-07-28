@@ -31,24 +31,23 @@
 
 #include "simapi.h"
 
-PhoneView::PhoneView(const QSize &size)
+DeviceView::DeviceView(const QSize &size)
     : QQuickWindow(),
       m_simApi(0),
       m_qmlObj(0)
 {
-    //setResizeMode(SizeRootObjectToView);
-
     // resize to the emulated resolution
     // this gives the (approximate) physical size of the device on the local screen
     resize(size);
     setMinimumSize(size);
     setMaximumSize(size);
-    contentItem()->setWidth(width());
-    contentItem()->setHeight(height());
-    setClearBeforeRendering(true);
+
+//    setClearBeforeRendering(true);
+//    setColor(Qt::transparent);
+//    setFlags(Qt::FramelessWindowHint);
 }
 
-void PhoneView::loadQmlPackage(const QString &packagePath)
+void DeviceView::loadQmlPackage(const QString &packagePath)
 {
     QString main;
     QString path;
@@ -65,7 +64,7 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
 
     if (main.isEmpty()) {
         Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-        package.setPath("org.kde.plasmaphonesim.default");
+        package.setPath("org.kde.plasmadevicesim.default");
         path = package.path();
         main = package.filePath("mainscript");
     }
@@ -81,11 +80,11 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
 
     if (!m_simApi) {
         m_simApi = new SimApi(path, this);
-        connect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
+        connect(m_simApi, &SimApi::packagePathChanged, this, &DeviceView::loadQmlPackage);
     } else if (sender() != m_simApi || packagePath != path) {
-        disconnect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
+        disconnect(m_simApi, &SimApi::packagePathChanged, this, &DeviceView::loadQmlPackage);
         m_simApi->setPackagePath(packagePath);
-        connect(m_simApi, &SimApi::packagePathChanged, this, &PhoneView::loadQmlPackage);
+        connect(m_simApi, &SimApi::packagePathChanged, this, &DeviceView::loadQmlPackage);
     }
 
     m_qmlObj->engine()->rootContext()->setContextProperty("api", m_simApi);
@@ -102,7 +101,7 @@ void PhoneView::loadQmlPackage(const QString &packagePath)
     mainItem->setParentItem(contentItem());
 }
 
-void PhoneView::loadShellPackage(const QString &packagePath)
+void DeviceView::loadShellPackage(const QString &packagePath)
 {
     Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
     package.setPath(packagePath);

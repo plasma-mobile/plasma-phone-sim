@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.1
 
 ColumnLayout {
+    anchors.fill: parent
     FileDialog {
         id: fileDialog
         selectExisting: true
@@ -18,6 +19,9 @@ ColumnLayout {
         Layout.alignment: Qt.AlignCenter
         text: i18n("Load QML file")
         onClicked: {
+            //api.packagePath = "/home/aseigo/src/shashlik/plasma-device-sim/test.qml";
+            //return;
+
             fileDialog.selectedNameFilter = ".qml";
             fileDialog.selectFolder = false;
             fileDialog.visible = true;

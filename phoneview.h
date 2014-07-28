@@ -28,12 +28,12 @@ namespace KDeclarative
 class SimApi;
 
 
-class PhoneView : public QQuickWindow
+class DeviceView : public QQuickWindow
 {
     Q_OBJECT
 
 public:
-    PhoneView(const QSize &size);
+    DeviceView(const QSize &size);
 
 public Q_SLOTS:
     void loadQmlPackage(const QString &packagePath);

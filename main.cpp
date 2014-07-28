@@ -36,11 +36,11 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     QApplication app(argc, argv);
     app.setApplicationName("plasma-phone-sim");
-    app.setApplicationDisplayName(i18n("Plasma Phone Device Simulator"));
+    app.setApplicationDisplayName(i18n("Plasma Device Simulator"));
     app.setOrganizationDomain("kde.org");
     app.setApplicationVersion(version);
     app.setWindowIcon(QIcon::fromTheme("plasma")); //TODO: phone icon? :)
-    parser.setApplicationDescription("Plasma Phone Device Simulator");
+    parser.setApplicationDescription("Plasma Device Simulator");
 
     QCommandLineOption qmlPackageOpt(QStringList() << QStringLiteral("q") << QStringLiteral("qml-package"),
                                      i18n("Path to a QML package to load"),
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     qDebug() << "Emulated resolution" << width << 'x' << height << '@' << deviceDpi;
 
     const QSize size(width, height);
-    PhoneView window(size);
+    DeviceView window(size);
     window.show();
 
     const QString shellPackage = parser.value(shellPackageOpt);

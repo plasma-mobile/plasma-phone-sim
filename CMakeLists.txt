@@ -1,4 +1,4 @@
-project(plasma-phone-sim)
+project(plasma-device-sim)
 
 # minimal requirements
 cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
@@ -33,16 +33,16 @@ feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAG
 
 include(CheckIncludeFiles)
 
-set(plasma-phone-sim_SRCS
+set(plasma-device-sim_SRCS
     main.cpp
     phoneview.cpp
     simapi.cpp
 )
 
-#qt5_wrap_ui(plasma-phone-sim_SRCS .ui)
+#qt5_wrap_ui(plasma-device-sim_SRCS .ui)
 
-add_executable(plasma-phone-sim ${plasma-phone-sim_SRCS})
-target_link_libraries(plasma-phone-sim
+add_executable(plasma-device-sim ${plasma-device-sim_SRCS})
+target_link_libraries(plasma-device-sim
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
@@ -52,6 +52,6 @@ target_link_libraries(plasma-phone-sim
   KF5::PlasmaQuick
 )
 
-install(TARGETS plasma-phone-sim ${INSTALL_TARGETS_DEFAULT_ARGS})
-plasma_install_package(qml/default org.kde.plasmaphonesim.default packages package)
+install(TARGETS plasma-device-sim ${INSTALL_TARGETS_DEFAULT_ARGS})
+plasma_install_package(qml/default org.kde.plasmadevicesim.default packages package)
 
