@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
             if (svgPath.isEmpty()) {
                 const QString errorMsg = i18n("Could not find requested device %1. Try --list-devices.", device);
-                qFatal(errorMsg.toLocal8Bit());
+                qFatal("%s", errorMsg.toLocal8Bit().constData());
             }
         }
 
