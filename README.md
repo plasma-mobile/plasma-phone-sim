@@ -3,7 +3,7 @@ plasma-phone-sim
 
 Device simulator to make developing Plasma Phone components easier on laptop/desktop systems
 
-plasma-phone-sim [--qml-package] [--shell-package] [--dev-res WIDTHxHEIGHT[xDPI]]
+plasma-device-sim [--qml-package] [--shell-package] [--dev-res WIDTHxHEIGHT[xDPI]]
 
 == Roadmap
 
