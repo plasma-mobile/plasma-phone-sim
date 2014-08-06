@@ -21,6 +21,8 @@
 #include <QQmlComponent>
 #include <QQuickWindow>
 
+#include <Plasma/Package>
+
 namespace KDeclarative
 {
     class QmlObject;
@@ -35,6 +37,8 @@ class DeviceView : public QQuickWindow
 
 public:
     DeviceView(const QSize &size, const QString &frameSvgPath);
+    void setLookAndFeelPackge(const QString &packagePath);
+    void loadLookAndFeelComponent(const QString &startingComponent);
 
 public Q_SLOTS:
     void loadQmlPackage(const QString &packagePath);
@@ -50,4 +54,6 @@ private:
     QQmlComponent *m_frameComponent;
     QQmlEngine *m_frameEngine;
     QRectF m_screenGeom;
+    Plasma::Package m_shellPackage;
+    Plasma::Package m_lnfPackage;
 };

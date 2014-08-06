@@ -26,10 +26,10 @@
 #include <KDeclarative/KDeclarative>
 #include <KDeclarative/QmlObject>
 
-#include <Plasma/Package>
 #include <Plasma/PluginLoader>
 #include <Plasma/Svg>
 
+#include "packages.h"
 #include "simapi.h"
 
 DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
@@ -97,6 +97,30 @@ void DeviceView::createFrame(QQmlComponent::Status status)
     }
 }
 
+void DeviceView::setLookAndFeelPackge(const QString &packagePath)
+{
+    m_lnfPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/LookAndFeel");
+    m_lnfPackage.setPath(packagePath);
+}
+
+void DeviceView::loadLookAndFeelComponent(const QString &component)
+{
+    if (m_lnfPackage.isValid()) {
+        qDebug() << "No Look And Feel package has been set.";
+        return;
+    }
+
+    const QString fileKey = component + "mainscript";
+    const QString qml = m_lnfPackage.filePath(fileKey.toLatin1());
+    if (qml.isEmpty()) {
+        qDebug() << "Could not find starting file for component" << component
+                 << "in Look And Feel package at" << m_lnfPackage.path();
+        return;
+    }
+
+    loadQmlPackage(qml);
+}
+
 void DeviceView::loadQmlPackage(const QString &packagePath)
 {
     //FIXME: is m_parentItem already created?
@@ -157,9 +181,9 @@ void DeviceView::loadQmlPackage(const QString &packagePath)
 
 void DeviceView::loadShellPackage(const QString &packagePath)
 {
-    Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
-    package.setPath(packagePath);
-    if (!package.isValid()) {
+    m_shellPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
+    m_shellPackage.setPath(packagePath);
+    if (!m_shellPackage.isValid()) {
         qDebug() << "Invalid shell package!";
         return;
     }
