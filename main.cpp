@@ -54,6 +54,13 @@ int main(int argc, char *argv[])
                                        i18n("A Plasma Shell package to load"),
                                        i18n("shell package path"));
 
+    QCommandLineOption lnfPackageOpt(QStringList() << QStringLiteral("l") << QStringLiteral("lookandfeel"),
+                                     i18n("A Plasma Look and Feel package to load"),
+                                     i18n("look-and-feel package path"));
+    QCommandLineOption lnfStartPackageOpt(QStringList() << QStringLiteral("c") << QStringLiteral("component"),
+                                          i18n("The Look and Feel package component to load"),
+                                          i18n("look-and-feel package component"));
+
     QCommandLineOption resOpt(QStringList() << QStringLiteral("r") << QStringLiteral("dev-res"),
                               i18n("Resolution to emultate: WIDTHxHEIGHT@DPI"),
                               QStringLiteral("resolution"),
@@ -69,6 +76,8 @@ int main(int argc, char *argv[])
     cliOptions.addVersionOption();
     cliOptions.addHelpOption();
     cliOptions.addOption(qmlPackageOpt);
+    cliOptions.addOption(lnfPackageOpt);
+    cliOptions.addOption(lnfStartPackageOpt);
     cliOptions.addOption(shellPackageOpt);
     cliOptions.addOption(resOpt);
     cliOptions.addOption(deviceOpt);
@@ -149,13 +158,27 @@ int main(int argc, char *argv[])
     DeviceView window(size, svgPath);
     window.show();
 
+    const QString lnfPackage = cliOptions.value(lnfPackageOpt);
+    const QString lnfStartingComponent = cliOptions.value(lnfStartPackageOpt);
+    if (!lnfPackage.isEmpty()) {
+        window.setLookAndFeelPackge(lnfPackage);
+    }
+
     const QString shellPackage = cliOptions.value(shellPackageOpt);
     if (shellPackage.isEmpty()) {
-        // no shell package, lets see if we have a QML package then
-        const QString qmlPackage = cliOptions.value(qmlPackageOpt);
-        window.loadQmlPackage(qmlPackage);
+        // no shell package
+        if (!lnfPackage.isEmpty() && !lnfStartingComponent.isEmpty()) {
+            window.loadLookAndFeelComponent(lnfStartingComponent);
+        } else {
+            // lets see if we have a QML package then
+            const QString qmlPackage = cliOptions.value(qmlPackageOpt);
+            window.loadQmlPackage(qmlPackage);
+        }
     } else {
         window.loadShellPackage(shellPackage);
+        if (!lnfPackage.isEmpty() && !lnfStartingComponent.isEmpty()) {
+            window.loadLookAndFeelComponent(lnfStartingComponent);
+        }
     }
 
 
