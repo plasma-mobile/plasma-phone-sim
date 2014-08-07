@@ -21,6 +21,7 @@
 #include "packages.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QStandardPaths>
 
 #include <klocalizedstring.h>
@@ -30,17 +31,32 @@
 
 QString dataDir()
 {
-    return QStandardPaths::locate(QStandardPaths::DataLocation, "plasma", QStandardPaths::LocateDirectory);
+    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
+    QDir location;
+    for (auto path: paths) {
+        if (path.startsWith("/home")) {
+            continue;
+        }
+
+        location.setPath(path);
+        location.cdUp();
+        location.cd("plasma");
+        if (location.exists()) {
+            break;
+        }
+    }
+    return location.absolutePath();
 }
 
 void LookAndFeelPackage::initPackage(Plasma::Package *package)
 {
     // http://community.kde.org/Plasma/lookAndFeelPackage#
 
-    package->setDefaultPackageRoot(dataDir() + "/look-and-feel/");
+    package->setDefaultPackageRoot(dataDir() + "/look-and-feel");
 
     //Defaults
     package->addFileDefinition("defaults", "defaults", i18n("Default settings for theme, etc."));
+    package->setRequired("defaults", true);
 
     //Directories
     package->addDirectoryDefinition("previews", "previews", i18n("Preview Images"));
