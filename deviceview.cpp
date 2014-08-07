@@ -105,7 +105,7 @@ void DeviceView::setLookAndFeelPackge(const QString &packagePath)
 
 void DeviceView::loadLookAndFeelComponent(const QString &component)
 {
-    if (m_lnfPackage.isValid()) {
+    if (!m_lnfPackage.isValid()) {
         qDebug() << "No Look And Feel package has been set.";
         return;
     }
