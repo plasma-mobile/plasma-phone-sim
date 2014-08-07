@@ -38,7 +38,8 @@ DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
       m_qmlObj(0),
       m_parentItem(0),
       m_frameComponent(0),
-      m_frameEngine(0)
+      m_frameEngine(0),
+      m_lnfPackageStructure(0)
 {
     // resize to the emulated resolution
     // this gives the (approximate) physical size of the device on the local screen
@@ -88,6 +89,11 @@ DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
     }
 }
 
+DeviceView::~DeviceView()
+{
+    delete m_lnfPackageStructure;
+}
+
 void DeviceView::createFrame(QQmlComponent::Status status)
 {
     if (status == QQmlComponent::Ready) {
@@ -99,7 +105,10 @@ void DeviceView::createFrame(QQmlComponent::Status status)
 
 void DeviceView::setLookAndFeelPackge(const QString &packagePath)
 {
-    m_lnfPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/LookAndFeel");
+    if (!m_lnfPackageStructure) {
+        m_lnfPackageStructure = new LookAndFeelPackage();
+    }
+    m_lnfPackage = Plasma::Package(m_lnfPackageStructure);
     m_lnfPackage.setPath(packagePath);
 }
 

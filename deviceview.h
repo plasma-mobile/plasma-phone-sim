@@ -37,6 +37,8 @@ class DeviceView : public QQuickWindow
 
 public:
     DeviceView(const QSize &size, const QString &frameSvgPath);
+    ~DeviceView();
+
     void setLookAndFeelPackge(const QString &packagePath);
     void loadLookAndFeelComponent(const QString &startingComponent);
 
@@ -55,5 +57,6 @@ private:
     QQmlEngine *m_frameEngine;
     QRectF m_screenGeom;
     Plasma::Package m_shellPackage;
+    Plasma::PackageStructure *m_lnfPackageStructure;
     Plasma::Package m_lnfPackage;
 };
