@@ -140,6 +140,39 @@ bool SimApi::hasGyro() const
     return m_sensors & Gyro;
 }
 
+float SimApi::gyroX() const
+{
+    return m_gyroX;
+}
+
+float SimApi::gyroY() const
+{
+    return m_gyroY;
+}
+
+float SimApi::gyroZ() const
+{
+    return m_gyroZ;
+}
+
+void SimApi::setGyro(float X, float Y, float Z)
+{
+    if (m_gyroX != X) {
+        m_gyroX = X;
+        emit gyroXChanged();
+    }
+
+    if (m_gyroY != Y) {
+        m_gyroY = Y;
+        emit gyroYChanged();
+    }
+
+    if (m_gyroZ != Z) {
+        m_gyroZ = Z;
+        emit gyroZChanged();
+    }
+}
+
 bool SimApi::hasMagnetometer() const
 {
     return m_sensors & Magnetometer;

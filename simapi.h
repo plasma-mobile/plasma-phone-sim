@@ -84,6 +84,10 @@ public:
     bool hasGPS() const;
 
     bool hasGyro() const;
+    float gyroX() const;
+    float gyroY() const;
+    float gyroZ() const;
+    void setGyro(float x, float y, float z);
 
     bool hasMagnetometer() const;
 
@@ -99,15 +103,18 @@ public:
 Q_SIGNALS:
     void packagePathChanged(const QString &path);
     void hasAccelerometerChanged() const;
-    void accelXChanged();
-    void accelYChanged();
-    void accelZChanged();
+    void accelXChanged() const;
+    void accelYChanged() const;
+    void accelZChanged() const;
     void hasGravitySensorChanged() const;
-    void gravityXChanged();
-    void gravityYChanged();
-    void gravityZChanged();
+    void gravityXChanged() const;
+    void gravityYChanged() const;
+    void gravityZChanged() const;
     void hasGPSChanged() const;
     void hasGyroChanged() const;
+    void gyroXChanged() const;
+    void gyroYChanged() const;
+    void gyroZChanged() const;
     void hasMagnetometerChanged() const;
     void hasVolumeUpKeyChanged() const;
     void volumeUpKeyPressed() const;
@@ -141,6 +148,9 @@ private:
     float m_gravityX;
     float m_gravityY;
     float m_gravityZ;
+    float m_gyroX;
+    float m_gyroY;
+    float m_gyroZ;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SimApi::HardwareKeys);
