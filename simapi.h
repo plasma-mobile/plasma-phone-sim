@@ -24,6 +24,9 @@ class SimApi : public QObject
     Q_OBJECT
     Q_PROPERTY(QString packagePath READ packagePath WRITE setPackagePath NOTIFY packagePathChanged)
     Q_PROPERTY(bool hasAccelerometer READ hasAccelerometer NOTIFY hasAccelerometerChanged)
+    Q_PROPERTY(float accelX READ accelX NOTIFY accelXChanged);
+    Q_PROPERTY(float accelY READ accelY NOTIFY accelYChanged);
+    Q_PROPERTY(float accelZ READ accelZ NOTIFY accelZChanged);
     Q_PROPERTY(bool hasGPS READ hasGPS NOTIFY hasGPSChanged)
     Q_PROPERTY(bool hasGyro READ hasGyro NOTIFY hasGyroChanged)
     Q_PROPERTY(bool hasMagnetometer READ hasMagnetometer NOTIFY hasMagnetometerChanged)
@@ -64,6 +67,10 @@ public:
 
     void setSensors(const Sensors &sensors);
     bool hasAccelerometer() const;
+    float accelX() const;
+    float accelY() const;
+    float accelZ() const;
+    void setAccel(float x, float y, float z);
     bool hasGPS() const;
     bool hasGyro() const;
     bool hasMagnetometer() const;
@@ -79,29 +86,32 @@ public:
 
 Q_SIGNALS:
     void packagePathChanged(const QString &path);
-    bool hasAccelerometerChanged() const;
-    bool hasGPSChanged() const;
-    bool hasGyroChanged() const;
-    bool hasMagnetometerChanged() const;
-    bool hasVolumeUpKeyChanged() const;
+    void hasAccelerometerChanged() const;
+    void accelXChanged();
+    void accelYChanged();
+    void accelZChanged();
+    void hasGPSChanged() const;
+    void hasGyroChanged() const;
+    void hasMagnetometerChanged() const;
+    void hasVolumeUpKeyChanged() const;
     void volumeUpKeyPressed() const;
     void volumeUpKeyReleased() const;
-    bool hasVolumeDownKeyChanged() const;
+    void hasVolumeDownKeyChanged() const;
     void volumeDownKeyPressed() const;
     void volumeDownKeyReleased() const;
-    bool hasVolumeMuteKeyChanged() const;
+    void hasVolumeMuteKeyChanged() const;
     void volumeMuteKeyPressed() const;
     void volumeMuteKeyReleased() const;
-    bool hasPowerKeyChanged() const;
+    void hasPowerKeyChanged() const;
     void powerKeyPressed() const;
     void powerKeyReleased() const;
-    bool hasHomeKeyChanged() const;
+    void hasHomeKeyChanged() const;
     void homeKeyPressed() const;
     void homeKeyReleased() const;
-    bool hasBackKeyChanged() const;
+    void hasBackKeyChanged() const;
     void backKeyPressed() const;
     void backKeyReleased() const;
-    bool hasMenuKeyChanged() const;
+    void hasMenuKeyChanged() const;
     void menuKeyPressed() const;
     void menuKeyReleased() const;
 
@@ -109,6 +119,9 @@ private:
     QString m_packagePath;
     Sensors m_sensors;
     HardwareKeys m_hardwareKeys;
+    float m_accelX;
+    float m_accelY;
+    float m_accelZ;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SimApi::HardwareKeys);

@@ -53,6 +53,40 @@ bool SimApi::hasAccelerometer() const
     return m_sensors & Accelerometer;
 }
 
+float SimApi::accelX() const
+{
+    return m_accelX;
+}
+
+float SimApi::accelY() const
+{
+    return m_accelY;
+}
+
+float SimApi::accelZ() const
+{
+    return m_accelZ;
+}
+
+void SimApi::setAccel(float X, float Y, float Z)
+{
+    if (m_accelX != X) {
+        m_accelX = X;
+        emit accelXChanged();
+    }
+
+    if (m_accelY != Y) {
+        m_accelY = Y;
+        emit accelYChanged();
+    }
+
+    if (m_accelZ != Z) {
+        m_accelZ = Z;
+        emit accelZChanged();
+    }
+}
+
+
 bool SimApi::hasGPS() const
 {
     return m_sensors & GPS;
