@@ -26,7 +26,16 @@ SimApi::SimApi(const QString &currentPath, QObject *parent)
       m_accelZ(0),
       m_gravityX(0),
       m_gravityY(0),
-      m_gravityZ(0)
+      m_gravityZ(0),
+      m_gyroX(0),
+      m_gyroY(0),
+      m_gyroZ(0),
+      m_magneticX(0),
+      m_magneticY(0),
+      m_magneticZ(0),
+      m_magneticBiasX(0),
+      m_magneticBiasY(0),
+      m_magneticBiasZ(0)
 {
 }
 
@@ -176,6 +185,71 @@ void SimApi::setGyro(float X, float Y, float Z)
 bool SimApi::hasMagnetometer() const
 {
     return m_sensors & Magnetometer;
+}
+
+float SimApi::magneticX() const
+{
+    return m_magneticX;
+}
+
+float SimApi::magneticY() const
+{
+    return m_magneticY;
+}
+
+float SimApi::magneticZ() const
+{
+    return m_magneticZ;
+}
+
+float SimApi::magneticBiasX() const
+{
+    return m_magneticBiasX;
+}
+
+float SimApi::magneticBiasY() const
+{
+    return m_magneticBiasY;
+}
+
+float SimApi::magneticBiasZ() const
+{
+    return m_magneticZ;
+}
+
+void SimApi::setMagentic(float X, float XBias,
+                         float Y, float YBias,
+                         float Z, float ZBias)
+{
+    if (m_magneticX != X) {
+        m_magneticX = X;
+        emit magneticXChanged();
+    }
+
+    if (m_magneticBiasX != XBias) {
+        m_magneticBiasX = XBias;
+        emit magneticBiasXChanged();
+    }
+
+    if (m_magneticY != Y) {
+        m_magneticY = Y;
+        emit magneticYChanged();
+    }
+
+    if (m_magneticBiasY != YBias) {
+        m_magneticBiasY = YBias;
+        emit magneticBiasYChanged();
+    }
+
+    if (m_magneticZ != Z) {
+        m_magneticZ = Z;
+        emit magneticZChanged();
+    }
+
+    if (m_magneticBiasZ != ZBias) {
+        m_magneticBiasZ = ZBias;
+        emit magneticBiasZChanged();
+    }
 }
 
 void SimApi::setHardwareKeys(const HardwareKeys &keys)

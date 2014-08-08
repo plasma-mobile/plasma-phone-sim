@@ -28,9 +28,21 @@ class SimApi : public QObject
     Q_PROPERTY(float accelY READ accelY NOTIFY accelYChanged);
     Q_PROPERTY(float accelZ READ accelZ NOTIFY accelZChanged);
     Q_PROPERTY(bool hasGravitySensor READ hasGravitySensor NOTIFY hasGravitySensorChanged)
+    Q_PROPERTY(float gravityX READ gravityX NOTIFY gravityXChanged);
+    Q_PROPERTY(float gravityY READ gravityY NOTIFY gravityYChanged);
+    Q_PROPERTY(float gravityZ READ gravityZ NOTIFY gravityZChanged);
     Q_PROPERTY(bool hasGPS READ hasGPS NOTIFY hasGPSChanged)
     Q_PROPERTY(bool hasGyro READ hasGyro NOTIFY hasGyroChanged)
+    Q_PROPERTY(float gravityX READ gravityX NOTIFY gravityXChanged);
+    Q_PROPERTY(float gravityY READ gravityY NOTIFY gravityYChanged);
+    Q_PROPERTY(float gravityZ READ gravityZ NOTIFY gravityZChanged);
     Q_PROPERTY(bool hasMagnetometer READ hasMagnetometer NOTIFY hasMagnetometerChanged)
+    Q_PROPERTY(float magneticX READ magneticX NOTIFY magneticXChanged);
+    Q_PROPERTY(float magneticY READ magneticY NOTIFY magneticYChanged);
+    Q_PROPERTY(float magneticZ READ magneticZ NOTIFY magneticZChanged);
+    Q_PROPERTY(float magneticBiasX READ magneticBiasX NOTIFY magneticBiasXChanged);
+    Q_PROPERTY(float magneticBiasY READ magneticBiasY NOTIFY magneticBiasYChanged);
+    Q_PROPERTY(float magneticBiasZ READ magneticBiasZ NOTIFY magneticBiasZChanged);
     Q_PROPERTY(bool hasVolumeUpKey READ hasVolumeUpKey NOTIFY hasVolumeUpKeyChanged)
     Q_PROPERTY(bool hasVolumeDownKey  READ hasVolumeDownKey NOTIFY hasVolumeDownKeyChanged)
     Q_PROPERTY(bool hasVolumeMuteKey  READ hasVolumeMuteKey NOTIFY hasVolumeMuteKeyChanged)
@@ -96,6 +108,15 @@ public:
     void setGyro(float x, float y, float z);
 
     bool hasMagnetometer() const;
+    float magneticX() const;
+    float magneticY() const;
+    float magneticZ() const;
+    float magneticBiasX() const;
+    float magneticBiasY() const;
+    float magneticBiasZ() const;
+    void setMagentic(float x, float xBias,
+                     float y, float yBias,
+                     float z, float zBias);
 
     void setHardwareKeys(const HardwareKeys &keys);
     bool hasVolumeUpKey() const;
@@ -122,6 +143,12 @@ Q_SIGNALS:
     void gyroYChanged() const;
     void gyroZChanged() const;
     void hasMagnetometerChanged() const;
+    void magneticXChanged() const;
+    void magneticYChanged() const;
+    void magneticZChanged() const;
+    void magneticBiasXChanged() const;
+    void magneticBiasYChanged() const;
+    void magneticBiasZChanged() const;
     void hasVolumeUpKeyChanged() const;
     void volumeUpKeyPressed() const;
     void volumeUpKeyReleased() const;
@@ -157,6 +184,12 @@ private:
     float m_gyroX;
     float m_gyroY;
     float m_gyroZ;
+    float m_magneticX;
+    float m_magneticY;
+    float m_magneticZ;
+    float m_magneticBiasX;
+    float m_magneticBiasY;
+    float m_magneticBiasZ;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SimApi::HardwareKeys);
