@@ -67,6 +67,7 @@ DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
                     y: %3\n\
                     width: %4\n\
                     height: %5\n\
+                    clip: true\n\
                 }\n\
             }")
         .arg(frameSvgPath).arg(m_screenGeom.left()).arg(m_screenGeom.top()).arg(m_screenGeom.width()).arg(m_screenGeom.height());
@@ -108,6 +109,7 @@ void DeviceView::setLookAndFeelPackge(const QString &packagePath)
     if (!m_lnfPackageStructure) {
         m_lnfPackageStructure = new LookAndFeelPackage();
     }
+
     m_lnfPackage = Plasma::Package(m_lnfPackageStructure);
     m_lnfPackage.setPath(packagePath);
 }
