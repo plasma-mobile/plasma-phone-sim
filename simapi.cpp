@@ -20,7 +20,13 @@
 
 SimApi::SimApi(const QString &currentPath, QObject *parent)
     : QObject(parent),
-      m_packagePath(currentPath)
+      m_packagePath(currentPath),
+      m_accelX(0),
+      m_accelY(0),
+      m_accelZ(0),
+      m_gravityX(0),
+      m_gravityY(0),
+      m_gravityZ(0)
 {
 }
 
@@ -86,6 +92,43 @@ void SimApi::setAccel(float X, float Y, float Z)
     }
 }
 
+bool SimApi::hasGravitySensor() const
+{
+    return m_sensors & GravitySensor;
+}
+
+float SimApi::gravityX() const
+{
+    return m_gravityX;
+}
+
+float SimApi::gravityY() const
+{
+    return m_gravityY;
+}
+
+float SimApi::gravityZ() const
+{
+    return m_gravityZ;
+}
+
+void SimApi::setGravity(float X, float Y, float Z)
+{
+    if (m_gravityX != X) {
+        m_gravityX = X;
+        emit gravityXChanged();
+    }
+
+    if (m_gravityY != Y) {
+        m_gravityY = Y;
+        emit gravityYChanged();
+    }
+
+    if (m_gravityZ != Z) {
+        m_gravityZ = Z;
+        emit gravityZChanged();
+    }
+}
 
 bool SimApi::hasGPS() const
 {

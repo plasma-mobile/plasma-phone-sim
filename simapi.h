@@ -27,6 +27,7 @@ class SimApi : public QObject
     Q_PROPERTY(float accelX READ accelX NOTIFY accelXChanged);
     Q_PROPERTY(float accelY READ accelY NOTIFY accelYChanged);
     Q_PROPERTY(float accelZ READ accelZ NOTIFY accelZChanged);
+    Q_PROPERTY(bool hasGravitySensor READ hasGravitySensor NOTIFY hasGravitySensorChanged)
     Q_PROPERTY(bool hasGPS READ hasGPS NOTIFY hasGPSChanged)
     Q_PROPERTY(bool hasGyro READ hasGyro NOTIFY hasGyroChanged)
     Q_PROPERTY(bool hasMagnetometer READ hasMagnetometer NOTIFY hasMagnetometerChanged)
@@ -43,7 +44,8 @@ public:
         Accelerometer = 1,
         GPS = 2,
         Gyro = 4,
-        Magnetometer = 8
+        Magnetometer = 8,
+        GravitySensor = 16
     };
     Q_ENUMS(Sensor);
     Q_DECLARE_FLAGS(Sensors, Sensor);
@@ -71,8 +73,18 @@ public:
     float accelY() const;
     float accelZ() const;
     void setAccel(float x, float y, float z);
+
+    bool hasGravitySensor() const;
+    float gravityX() const;
+    float gravityY() const;
+    float gravityZ() const;
+    void setGravity(float x, float y, float z);
+
+
     bool hasGPS() const;
+
     bool hasGyro() const;
+
     bool hasMagnetometer() const;
 
     void setHardwareKeys(const HardwareKeys &keys);
@@ -90,6 +102,10 @@ Q_SIGNALS:
     void accelXChanged();
     void accelYChanged();
     void accelZChanged();
+    void hasGravitySensorChanged() const;
+    void gravityXChanged();
+    void gravityYChanged();
+    void gravityZChanged();
     void hasGPSChanged() const;
     void hasGyroChanged() const;
     void hasMagnetometerChanged() const;
@@ -122,6 +138,9 @@ private:
     float m_accelX;
     float m_accelY;
     float m_accelZ;
+    float m_gravityX;
+    float m_gravityY;
+    float m_gravityZ;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SimApi::HardwareKeys);
