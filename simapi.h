@@ -42,6 +42,7 @@ public:
         Gyro = 4,
         Magnetometer = 8
     };
+    Q_ENUMS(Sensor);
     Q_DECLARE_FLAGS(Sensors, Sensor);
 
     enum HardwareKey {
@@ -53,6 +54,7 @@ public:
         BackKey = 32,
         MenuKey = 64
     };
+    Q_ENUMS(HardwareKey);
     Q_DECLARE_FLAGS(HardwareKeys, HardwareKey);
 
     SimApi(const QString &currentPath, QObject *parent);
