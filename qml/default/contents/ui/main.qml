@@ -19,9 +19,6 @@ ColumnLayout {
         Layout.alignment: Qt.AlignCenter
         text: i18n("Load QML file")
         onClicked: {
-            //api.packagePath = "/home/aseigo/src/shashlik/plasma-device-sim/test.qml";
-            //return;
-
             fileDialog.selectedNameFilter = ".qml";
             fileDialog.selectFolder = false;
             fileDialog.visible = true;
