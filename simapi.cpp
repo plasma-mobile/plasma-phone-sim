@@ -37,5 +37,84 @@ void SimApi::setPackagePath(const QString &path)
     }
 }
 
+void SimApi::setSensors(const Sensors &sensors)
+{
+    if (m_sensors != sensors) {
+        m_sensors = sensors;
+        emit hasAccelerometerChanged();
+        emit hasGPSChanged();
+        emit hasGyroChanged();
+        emit hasMagnetometerChanged();
+    }
+}
+
+bool SimApi::hasAccelerometer() const
+{
+    return m_sensors & Accelerometer;
+}
+
+bool SimApi::hasGPS() const
+{
+    return m_sensors & GPS;
+}
+
+bool SimApi::hasGyro() const
+{
+    return m_sensors & Gyro;
+}
+
+bool SimApi::hasMagnetometer() const
+{
+    return m_sensors & Magnetometer;
+}
+
+void SimApi::setHardwareKeys(const HardwareKeys &keys)
+{
+    if (m_hardwareKeys != keys) {
+        m_hardwareKeys = keys;
+        emit hasVolumeUpKeyChanged();
+        emit hasVolumeDownKeyChanged();
+        emit hasVolumeMuteKeyChanged();
+        emit hasPowerKeyChanged();
+        emit hasHomeKeyChanged();
+        emit hasBackKeyChanged();
+        emit hasMenuKeyChanged();
+    }
+}
+
+bool SimApi::hasVolumeUpKey() const
+{
+    return m_hardwareKeys & VolumeUpKey;
+}
+
+bool SimApi::hasVolumeDownKey() const
+{
+    return m_hardwareKeys & VolumeDownKey;
+}
+
+bool SimApi::hasVolumeMuteKey() const
+{
+    return m_hardwareKeys & VolumeMuteKey;
+}
+
+bool SimApi::hasPowerKey() const
+{
+    return m_hardwareKeys & PowerKey;
+}
+
+bool SimApi::hasHomeKey() const
+{
+    return m_hardwareKeys & HomeKey;
+}
+
+bool SimApi::hasBackKey() const
+{
+    return m_hardwareKeys & BackKey;
+}
+
+bool SimApi::hasMenuKey() const
+{
+    return m_hardwareKeys & MenuKey;
+}
 
 #include "simapi.moc"
