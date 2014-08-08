@@ -84,12 +84,26 @@ Q_SIGNALS:
     bool hasGyroChanged() const;
     bool hasMagnetometerChanged() const;
     bool hasVolumeUpKeyChanged() const;
+    void volumeUpKeyPressed() const;
+    void volumeUpKeyReleased() const;
     bool hasVolumeDownKeyChanged() const;
+    void volumeDownKeyPressed() const;
+    void volumeDownKeyReleased() const;
     bool hasVolumeMuteKeyChanged() const;
+    void volumeMuteKeyPressed() const;
+    void volumeMuteKeyReleased() const;
     bool hasPowerKeyChanged() const;
+    void powerKeyPressed() const;
+    void powerKeyReleased() const;
     bool hasHomeKeyChanged() const;
+    void homeKeyPressed() const;
+    void homeKeyReleased() const;
     bool hasBackKeyChanged() const;
+    void backKeyPressed() const;
+    void backKeyReleased() const;
     bool hasMenuKeyChanged() const;
+    void menuKeyPressed() const;
+    void menuKeyReleased() const;
 
 private:
     QString m_packagePath;
