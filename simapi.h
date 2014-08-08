@@ -45,7 +45,13 @@ public:
         GPS = 2,
         Gyro = 4,
         Magnetometer = 8,
-        GravitySensor = 16
+        GravitySensor = 16,
+        Light = 32,
+        Pressure = 64,
+        Proximity = 128,
+        Orientation = 256,
+        Temperature = 512,
+        Humidity = 1024
     };
     Q_ENUMS(Sensor);
     Q_DECLARE_FLAGS(Sensors, Sensor);
