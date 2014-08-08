@@ -32,14 +32,15 @@
 #include "packages.h"
 #include "simapi.h"
 
-DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
+DeviceView::DeviceView(const QSize &size, const QString &deviceSvgPath)
     : QQuickWindow(),
       m_simApi(0),
       m_qmlObj(0),
       m_parentItem(0),
       m_frameComponent(0),
       m_frameEngine(0),
-      m_lnfPackageStructure(0)
+      m_lnfPackageStructure(0),
+      m_deviceSvg(0)
 {
     // resize to the emulated resolution
     // this gives the (approximate) physical size of the device on the local screen
@@ -47,11 +48,11 @@ DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
     setMinimumSize(size);
     setMaximumSize(size);
 
-    if (!frameSvgPath.isEmpty()) {
-        Plasma::Svg svg;
-        svg.setImagePath(frameSvgPath);
-        svg.resize(size);
-        m_screenGeom = svg.elementRect("device-screen");
+    if (!deviceSvgPath.isEmpty()) {
+        m_deviceSvg = new Plasma::Svg(this);
+        m_deviceSvg->setImagePath(deviceSvgPath);
+        m_deviceSvg->resize(size);
+        m_screenGeom = m_deviceSvg->elementRect("device-screen");
         //qDebug() << m_screenGeom << size;
 
         const QString frameQml = QString(
@@ -70,7 +71,7 @@ DeviceView::DeviceView(const QSize &size, const QString &frameSvgPath)
                     clip: true\n\
                 }\n\
             }")
-        .arg(frameSvgPath).arg(m_screenGeom.left()).arg(m_screenGeom.top()).arg(m_screenGeom.width()).arg(m_screenGeom.height());
+        .arg(deviceSvgPath).arg(m_screenGeom.left()).arg(m_screenGeom.top()).arg(m_screenGeom.width()).arg(m_screenGeom.height());
         //qDebug() << frameQml;
         m_frameEngine = new QQmlEngine(this);
         m_frameComponent = new QQmlComponent(m_frameEngine);
@@ -166,6 +167,27 @@ void DeviceView::loadQmlPackage(const QString &packagePath)
 
     if (!m_simApi) {
         m_simApi = new SimApi(path, this);
+
+        if (m_deviceSvg) {
+            QMetaEnum values = m_simApi->metaObject()->enumerator(m_simApi->metaObject()->indexOfEnumerator("Sensor"));
+            SimApi::Sensors sensors;
+            for (int i = 0; i < values.keyCount(); ++i) {
+                if (m_deviceSvg->hasElement(values.key(i))) {
+                    sensors |= (SimApi::Sensor)values.value(i);
+                }
+            }
+            m_simApi->setSensors(sensors);
+
+            values = m_simApi->metaObject()->enumerator(m_simApi->metaObject()->indexOfEnumerator("HardwareKey"));
+            SimApi::HardwareKeys keys;
+            for (int i = 0; i < values.keyCount(); ++i) {
+                if (m_deviceSvg->hasElement(values.key(i))) {
+                    keys |= (SimApi::HardwareKey)values.value(i);
+                }
+            }
+            m_simApi->setHardwareKeys(keys);
+        }
+
         connect(m_simApi, &SimApi::packagePathChanged, this, &DeviceView::loadQmlPackage);
     } else if (sender() != m_simApi || packagePath != path) {
         disconnect(m_simApi, &SimApi::packagePathChanged, this, &DeviceView::loadQmlPackage);

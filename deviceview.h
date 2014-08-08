@@ -30,13 +30,17 @@ namespace KDeclarative
 
 class SimApi;
 
+namespace Plasma
+{
+    class Svg;
+} // namespace Plasma
 
 class DeviceView : public QQuickWindow
 {
     Q_OBJECT
 
 public:
-    DeviceView(const QSize &size, const QString &frameSvgPath);
+    DeviceView(const QSize &size, const QString &deviceSvgPath);
     ~DeviceView();
 
     void setLookAndFeelPackge(const QString &packagePath);
@@ -59,4 +63,5 @@ private:
     Plasma::Package m_shellPackage;
     Plasma::PackageStructure *m_lnfPackageStructure;
     Plasma::Package m_lnfPackage;
+    Plasma::Svg *m_deviceSvg;
 };
