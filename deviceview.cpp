@@ -103,6 +103,12 @@ void DeviceView::createFrame(QQmlComponent::Status status)
         m_parentItem = static_cast<QQuickItem *>(m_frameComponent->create(m_frameEngine->rootContext()));
         m_parentItem->setParentItem(contentItem());
         m_parentItem = m_parentItem->childItems().first();
+
+        Q_ASSERT(m_parentItem);
+        if (m_qmlObj) {
+            QQuickItem *mainItem = static_cast<QQuickItem *>(m_qmlObj->rootObject());
+            mainItem->setParentItem(m_parentItem);
+        }
     }
 }
 
