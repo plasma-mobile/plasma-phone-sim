@@ -18,6 +18,10 @@
 
 #include "simapi.h"
 
+#include <QDebug>
+#include <QMetaObject>
+#include <QMetaMethod>
+
 SimApi::SimApi(const QString &currentPath, QObject *parent)
     : QObject(parent),
       m_packagePath(currentPath),
@@ -37,6 +41,37 @@ SimApi::SimApi(const QString &currentPath, QObject *parent)
       m_magneticBiasY(0),
       m_magneticBiasZ(0)
 {
+    // connect all signals to the logSignal slot
+    // QMetaObject madness^Hmagic
+    const QMetaObject *metaObj = metaObject();
+    const int numMethods = metaObj->methodCount();
+    const int methodOffset = metaObj->methodOffset();
+    const int lastMethod = numMethods + methodOffset;
+    const QMetaMethod slot(metaObj->method(metaObj->indexOfSlot("logSignal()")));
+    for (int i = metaObj->methodOffset(); i < lastMethod; ++i) {
+        const QMetaMethod method(metaObj->method(i));
+        if (method.methodType() == QMetaMethod::Signal) {
+            connect(this, method, this, slot);
+        }
+    }
+
+//     connect(this, &SimApi::homeKeyPressed,
+//             this, &SimApi::logSignal);
+//     connect(this, &SimApi::homeKeyReleased,
+//             this, &SimApi::logSignal);
+}
+
+void SimApi::logSignal()
+{
+    QObject *s = sender();
+    if (!s) {
+        return;
+    }
+
+    const int signalIndex = senderSignalIndex();
+    const QMetaObject *metaObj = s->metaObject();
+    const QMetaMethod method(metaObj->method(signalIndex));
+    qDebug() << "EVENT!" << method.name();
 }
 
 QString SimApi::packagePath() const

@@ -171,6 +171,9 @@ Q_SIGNALS:
     void menuKeyPressed() const;
     void menuKeyReleased() const;
 
+private Q_SLOTS:
+    void logSignal();
+
 private:
     QString m_packagePath;
     Sensors m_sensors;
