@@ -54,6 +54,8 @@ private Q_SLOTS:
     void createFrame(QQmlComponent::Status status);
 
 private:
+    void createDeviceSvg(const QString &deviceSvgPath);
+
     SimApi *m_simApi;
     KDeclarative::QmlObject *m_qmlObj;
     QQuickItem *m_parentItem;
