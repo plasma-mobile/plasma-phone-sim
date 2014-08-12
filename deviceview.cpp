@@ -142,7 +142,6 @@ void DeviceView::loadLookAndFeelComponent(const QString &component)
 
 void DeviceView::loadQmlPackage(const QString &packagePath)
 {
-    //FIXME: is m_parentItem already created?
     QString main;
     QString path;
     const QFileInfo info(packagePath);
