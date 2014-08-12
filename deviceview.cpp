@@ -60,10 +60,11 @@ DeviceView::DeviceView(const QSize &size, const QString &deviceSvgPath)
              import org.kde.plasma.core 2.0 as PlasmaCore\n\
              \n\
              PlasmaCore.SvgItem { \n\
-                id: screen\n\
+                id: frame\n\
                 svg: PlasmaCore.Svg { imagePath: \"%1\" } \n\
                 anchors.fill: parent\n\
                 Rectangle {\n\
+                    id: screen\n\
                     x: %2\n\
                     y: %3\n\
                     width: %4\n\
