@@ -54,6 +54,6 @@ target_link_libraries(plasma-device-sim
 )
 
 install(TARGETS plasma-device-sim ${INSTALL_TARGETS_DEFAULT_ARGS})
-plasma_install_package(qml/default org.kde.plasmadevicesim.default packages package)
-plasma_install_package(qml/screens org.kde.plasmadevicesim.screens packages package)
+plasma_install_package(packages/load-qml-screen org.kde.plasmadevicesim.default packages package)
+plasma_install_package(packages/screens org.kde.plasmadevicesim.screens packages package)
 
