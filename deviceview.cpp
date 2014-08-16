@@ -32,6 +32,8 @@
 #include "packages.h"
 #include "simapi.h"
 
+// #define DEBUG_HARDWARE_QML
+
 DeviceView::DeviceView(const QSize &size, const QString &deviceSvgPath)
     : QQuickWindow(),
       m_simApi(new SimApi(QString(), this)),
@@ -118,8 +120,11 @@ void DeviceView::createDeviceSvg(const QString &deviceSvgPath)
     // techincally the Rectangle is not needed
     // but it can be nice for debuggig to see where the buttons are
     const QString hwKeyQml("\n    Rectangle { \n"
-//                           "          color: \"green\"\n"
+#ifdef DEBUG_HARDWARE_QML
+                           "          color: \"green\"\n"
+#else
                            "          opacity: 0\n"
+#endif
                            "          id: %1\n"
                            "          x: %2; y: %3; z: 1000\n"
                            "          width: %4; height: %5\n"
@@ -136,7 +141,10 @@ void DeviceView::createDeviceSvg(const QString &deviceSvgPath)
             keys |= (SimApi::HardwareKey)values.value(i);
 
             // now insert the QML bits
-            QRectF keyRect = m_deviceSvg->elementRect(values.key(i));
+            const QRectF keyRect = m_deviceSvg->elementRect(values.key(i));
+#ifdef DEBUG_HARDEBUG_HARDWARE_QMLDWARE_QML
+            qDebug() << "Found" << values.key(i) << "at" << keyRect;
+#endif
             QString lowerCaseName = values.key(i);
             lowerCaseName = lowerCaseName.left(1).toLower() +
                             lowerCaseName.right(lowerCaseName.size() - 1);
@@ -154,7 +162,9 @@ void DeviceView::createDeviceSvg(const QString &deviceSvgPath)
     // append the closing brace for the frame item
     frameQml += "\n}";
 
-    //qDebug() << frameQml;
+#ifdef DEBUG_HARDWARE_QML
+    qDebug() << frameQml;
+#endif
     m_frameEngine = new QQmlEngine(this);
     m_frameComponent = new QQmlComponent(m_frameEngine);
     m_frameComponent->setData(frameQml.toUtf8(), QUrl());
