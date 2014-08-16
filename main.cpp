@@ -73,6 +73,10 @@ int main(int argc, char *argv[])
 
     QCommandLineOption listDevicesOpt(QStringLiteral("list-devices"), i18n("Name of supported devices"));
 
+    QCommandLineOption nativeDpiOpt(QStringList() << QStringLiteral("n") << QStringLiteral("native-dpi"),
+                                 i18n("The native DPI to use; minimum 92"),
+                                 QStringLiteral("nativedpi"));
+
     cliOptions.addVersionOption();
     cliOptions.addHelpOption();
     cliOptions.addOption(qmlPackageOpt);
@@ -82,6 +86,7 @@ int main(int argc, char *argv[])
     cliOptions.addOption(resOpt);
     cliOptions.addOption(deviceOpt);
     cliOptions.addOption(listDevicesOpt);
+    cliOptions.addOption(nativeDpiOpt);
     cliOptions.process(app);
 
     if (cliOptions.isSet(listDevicesOpt)) {
@@ -102,6 +107,14 @@ int main(int argc, char *argv[])
     int width = 0;
     int height = 0;
     int nativeDpi = app.primaryScreen()->logicalDotsPerInchX();
+
+    if (cliOptions.isSet(nativeDpiOpt)) {
+        int dpiLie = cliOptions.value(nativeDpiOpt).toInt();
+        if (dpiLie >= 92) {
+            nativeDpi = dpiLie;
+        }
+    }
+
     int deviceDpi = nativeDpi;
     if (cliOptions.isSet(resOpt)) {
         const QString res = cliOptions.value(resOpt);
