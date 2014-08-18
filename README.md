@@ -7,13 +7,13 @@ plasma-device-sim [--qml-package] [--shell-package] [--lookandfeel] [--component
 
 == Roadmap
 
-=== Version 0.1
+=== Version 0.1: DONE
 Release Target: July 2014
 
 This version will be a simple single-window application based on Qt5/KF5 that loads a single
 QML Plasma::Package or a Plasma Shell Package (also a Plasma::Package type).
 
-=== Version 0.2
+=== Version 0.2: IN PROGRESS
 Release Target: September 2014
 
 Addition of system emulation controls (network available, e.g.) will be added on an
