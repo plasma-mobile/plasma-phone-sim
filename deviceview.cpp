@@ -142,7 +142,7 @@ void DeviceView::createDeviceSvg(const QString &deviceSvgPath)
 
             // now insert the QML bits
             const QRectF keyRect = m_deviceSvg->elementRect(values.key(i));
-#ifdef DEBUG_HARDEBUG_HARDWARE_QMLDWARE_QML
+#ifdef DEBUG_HARDWARE_QML
             qDebug() << "Found" << values.key(i) << "at" << keyRect;
 #endif
             QString lowerCaseName = values.key(i);
