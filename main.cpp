@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
                                  QStringLiteral("device"),
                                  QStringLiteral("nexus5"));
 
-    QCommandLineOption listDevicesOpt(QStringLiteral("list-devices"), i18n("Name of supported devices"));
+    QCommandLineOption listDevicesOpt(QStringLiteral("list-devices"), i18n("List of all supported devices"));
 
     QCommandLineOption nativeDpiOpt(QStringList() << QStringLiteral("n") << QStringLiteral("native-dpi"),
                                  i18n("The native DPI to use; minimum 92"),
