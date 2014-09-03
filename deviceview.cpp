@@ -29,7 +29,6 @@
 #include <Plasma/PluginLoader>
 #include <Plasma/Svg>
 
-#include "packages.h"
 #include "simapi.h"
 
 // #define DEBUG_HARDWARE_QML
@@ -41,7 +40,6 @@ DeviceView::DeviceView(const QSize &size, const QString &deviceSvgPath)
       m_parentItem(0),
       m_frameComponent(0),
       m_frameEngine(0),
-      m_lnfPackageStructure(0),
       m_deviceSvg(0)
 {
     // resize to the emulated resolution
@@ -58,7 +56,6 @@ DeviceView::DeviceView(const QSize &size, const QString &deviceSvgPath)
 
 DeviceView::~DeviceView()
 {
-    delete m_lnfPackageStructure;
 }
 
 void DeviceView::createDeviceSvg(const QString &deviceSvgPath)
@@ -201,11 +198,7 @@ void DeviceView::createFrame(QQmlComponent::Status status)
 
 void DeviceView::setLookAndFeelPackge(const QString &packagePath)
 {
-    if (!m_lnfPackageStructure) {
-        m_lnfPackageStructure = new LookAndFeelPackage();
-    }
-
-    m_lnfPackage = Plasma::Package(m_lnfPackageStructure);
+    m_lnfPackage = Plasma::PluginLoader::self()->loadPackage("Plasma/LookAndFeel");
     m_lnfPackage.setPath(packagePath);
 }
 

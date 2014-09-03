@@ -63,7 +63,6 @@ private:
     QQmlEngine *m_frameEngine;
     QRectF m_screenGeom;
     Plasma::Package m_shellPackage;
-    Plasma::PackageStructure *m_lnfPackageStructure;
     Plasma::Package m_lnfPackage;
     Plasma::Svg *m_deviceSvg;
 };

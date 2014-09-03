@@ -36,7 +36,6 @@ include(CheckIncludeFiles)
 set(plasma-device-sim_SRCS
     main.cpp
     deviceview.cpp
-    packages.cpp # when/if these become plugins then this can be removed
     simapi.cpp
 )
 
