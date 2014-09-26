@@ -46,9 +46,10 @@ public:
     void setLookAndFeelPackge(const QString &packagePath);
     void loadLookAndFeelComponent(const QString &startingComponent);
 
-public Q_SLOTS:
-    void loadQmlPackage(const QString &packagePath);
     void loadShellPackage(const QString &packagePath);
+    void loadShellComponent(const QString &component);
+
+    void loadQmlPackage(const QString &packagePath);
 
 private Q_SLOTS:
     void createFrame(QQmlComponent::Status status);

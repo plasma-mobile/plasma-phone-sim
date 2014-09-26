@@ -286,4 +286,24 @@ void DeviceView::loadShellPackage(const QString &packagePath)
     qDebug() << "Loading shell package at:" << packagePath;
 }
 
+void DeviceView::loadShellComponent(const QString &component)
+{
+    if (!m_shellPackage.isValid()) {
+        qDebug() << "No shell package has been set.";
+        return;
+    }
+
+    const QStringList components = component.split('/');
+    const QString dirKey = components.at(0);
+    const QString fileKey = components.size() > 1 ? components.at(1) + ".qml" : QString();
+    const QString qml = m_lnfPackage.filePath(dirKey.toLatin1(), fileKey.toLatin1());
+    if (qml.isEmpty()) {
+        qDebug() << "Could not find starting file for component" << component
+                 << "in shell package at" << m_shellPackage.path();
+        return;
+    }
+
+    loadQmlPackage(qml);
+}
+
 #include "moc_deviceview.cpp"
