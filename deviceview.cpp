@@ -296,7 +296,7 @@ void DeviceView::loadShellComponent(const QString &component)
     const QStringList components = component.split('/');
     const QString dirKey = components.at(0);
     const QString fileKey = components.size() > 1 ? components.at(1) + ".qml" : QString();
-    const QString qml = m_lnfPackage.filePath(dirKey.toLatin1(), fileKey.toLatin1());
+    const QString qml = m_shellPackage.filePath(dirKey.toLatin1(), fileKey.toLatin1());
     if (qml.isEmpty()) {
         qDebug() << "Could not find starting file for component" << component
                  << "in shell package at" << m_shellPackage.path();
