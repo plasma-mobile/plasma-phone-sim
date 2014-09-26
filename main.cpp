@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
         }
     } else {
         window.loadShellPackage(shellPackage);
-        if (!lnfPackage.isEmpty() && !startingComponent.isEmpty()) {
+        if (!shellPackage.isEmpty() && !startingComponent.isEmpty()) {
             window.loadShellComponent(startingComponent);
         }
     }
