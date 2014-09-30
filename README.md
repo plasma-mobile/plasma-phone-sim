@@ -1,6 +1,8 @@
 plasma-phone-sim
 ================
 
+Binaries: https://launchpad.net/~cyberspace/+archive/ubuntu/shashlik/+sourcepub/4447045/+listing-archive-extra
+
 Device simulator to make developing Plasma Phone components easier on laptop/desktop systems
 
 plasma-device-sim [--qml-package] [--shell-package] [--lookandfeel] [--component] [--dev-res WIDTHxHEIGHT[xDPI]]
